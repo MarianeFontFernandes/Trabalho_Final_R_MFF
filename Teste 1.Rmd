@@ -1,0 +1,44 @@
+---
+title: "Trabalho final - NT265"
+author: "Mariane Font Fernandes"
+date: "14/05/2019"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Introdução
+O desenvolvimento de um projeto de pesquisa na pós-graduação requer do estudante a leitura constante de artigos que ampliem seu conhecimento específico, sendo necessário saber a tendência da comunidade científica e o quanto já foi discutido sobre o assunto. A busca por autores bem conceituados na área, assim como artigos de grande impacto para citação, não é fácil em meio a tantos materiais disponíveis. Um modo de conseguir um direcionamento seria através do R e seu pacote “Bibliometrix”, que é capaz de fazer análises quantitativas e estatísticas de publicações e suas citações. Para exemplificar, este roteiro mostra a análise de artigos, que possuem crotonilação (crotonylation em inglês) em seu título, seguindo os códigos disponíveis neste pacote.
+
+## Ferramentas necessárias:
+Para que este roteiro seja executado, é necessário:
+  + [Software R](https://cran.r-project.org/bin/windows/base/);
+  + [RStudio](https://www.rstudio.com/products/rstudio/download/);
+  + [Git](https://git-scm.com/downloads);
+  + [MikTex](https://miktex.org/download);
+  + [Pacote “R markdown”](https://cran.r-project.org/web/packages/rmarkdown/index.html);
+  + [Pacote “Bibliometrix”](https://cran.r-project.org/web/packages/bibliometrix/index.html);
+  + Arquivo Scopus.bib, com dados dos artigos relacionados a crotonilação, adquirido a partir da base de dados [Scopus](https://www.scopus.com/).
+
+##Rmarkdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
