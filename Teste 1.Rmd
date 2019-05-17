@@ -3,13 +3,9 @@ title: "Trabalho final - NT265"
 author: "Mariane Font Fernandes"
 date: "17/05/2019"
 output:
+  word_document: default
   html_document:
     df_print: paged
-
-  pdf_document:
-    highlight: espresso
-    toc: true
-    toc_depth: 4
 ---
 
 ```{r setup, include=FALSE}
