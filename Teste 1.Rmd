@@ -2,7 +2,9 @@
 title: "Trabalho final - NT265"
 author: "Mariane Font Fernandes"
 date: "14/05/2019"
-output: word_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -11,34 +13,106 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ## Introdução
-O desenvolvimento de um projeto de pesquisa na pós-graduação requer do estudante a leitura constante de artigos que ampliem seu conhecimento específico, sendo necessário saber a tendência da comunidade científica e o quanto já foi discutido sobre o assunto. A busca por autores bem conceituados na área, assim como artigos de grande impacto para citação, não é fácil em meio a tantos materiais disponíveis. Um modo de conseguir um direcionamento seria através do R e seu pacote “Bibliometrix”, que é capaz de fazer análises quantitativas e estatísticas de publicações e suas citações. Para exemplificar, este roteiro mostra a análise de artigos, que possuem crotonilação (crotonylation em inglês) em seu título, seguindo os códigos disponíveis neste pacote.
+O desenvolvimento de um projeto de pesquisa na pós-graduação requer do estudante a leitura constante de artigos que ampliem seu conhecimento específico, sendo necessário saber a tendência da comunidade científica e o quanto já foi discutido sobre o assunto. A busca por autores bem conceituados na área, assim como artigos de grande impacto para citação, não é fácil em meio a tantos materiais disponíveis. Um modo de conseguir um direcionamento seria através do R e seu pacote “Bibliometrix”, que é capaz de fazer análises quantitativas e estatísticas de publicações e suas citações. Para exemplificar, este roteiro mostra a análise de artigos, que possuem crotonilação (*crotonylation* em inglês) em seu título, seguindo os códigos disponíveis neste pacote.
 
 ## Ferramentas necessárias:
-Para que este roteiro seja executado, é necessário:
+Para que este roteiro seja executado, é necessário fazer download do:
   + [Software R](https://cran.r-project.org/bin/windows/base/);
   + [RStudio](https://www.rstudio.com/products/rstudio/download/);
   + [Git](https://git-scm.com/downloads);
   + [MikTex](https://miktex.org/download);
-  + [Pacote “R markdown”](https://cran.r-project.org/web/packages/rmarkdown/index.html);
-  + [Pacote “Bibliometrix”](https://cran.r-project.org/web/packages/bibliometrix/index.html);
+  + Pacote [Rmarkdown](https://cran.r-project.org/web/packages/rmarkdown/index.html), escrevendo no console do RStudio install.packages("rmarkdown");
+  + Pacote [Bibliometrix](https://cran.r-project.org/web/packages/bibliometrix/index.html), escrevendo no console do RStudio install.packages("bibliometrix");
   + Arquivo Scopus.bib, com dados dos artigos relacionados a crotonilação, adquirido a partir da base de dados [Scopus](https://www.scopus.com/).
 
-##Rmarkdown
+## Desenvolvimento:
+#### 1. Carregando dado e coversão
+Após fazer o download das ferramentas necessárias e criar um diretório no GitHub, carregamos o pacote necessário para análise no RStudio com o comando:
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+library(bibliometrix)
 ```
 
-## Including Plots
+E carregamos o arquivo Scopus.bib, que será atribuído ao vetor D através da função "readFiles":
 
-You can also embed plots, for example:
+```{r}
+D <- readFiles("Scopus.bib")
+```
+Essa função é capaz de juntar outros arquivos de texto em um mesmo vetor e os converte em UTF-8. Como precisamos dele em data frame para realizar a análise, usaremos a função "convert2df", que será armazenada em M:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+M <- convert2df(D, dbsource="scopus", format="bibtex")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Em caso de dúvidas quanto as funções, é possível buscar ajuda no RStudio através do comando ?nome_da_função
+
+#### 2. Análise bibliométrica
+Para fazer a análise descritiva dos dados, utilizaremos a função "biblioAnalysis" que retorna as principais medidas na bibliometria em um objeto da classe “bibliometrix”:
+
+```{r}
+results <- biblioAnalysis(M, sep=";")
+```
+
+#### 3. Função *summary* e *plot*
+Para resumir os resultados bibliométricos obtidos e conseguir suas principais informações, assim como produção científica anual, principais artigos por número de citações, autores e países mais produtivos, citação total por país, fontes e palavras-chave mais relevantes, usamos a função "summary":
+
+```{r}
+options(width=100)
+S <- summary(object=results, k=10, pause=FALSE)
+```
+
+Para ver alguns gráficos básicos, usamos a função "plot":
+
+```{r}
+plot(x=results, k=10, pause=FALSE)
+```
+
+
+#### 4. Análise de referências citadas
+
+
+
+#### 5. Ranking de dominância de autores
+
+
+
+#### 6. Índice-h de autores
+
+
+
+#### 7. Produtividade dos principais autores ao decorrer do tempo
+
+
+
+#### 8. Estimativa de coeficiente pela lei de Lotka
+
+
+
+#### 9. Matrizes de redes bibliográficas
+
+
+
+#### 10. Análise descritiva das características gráficas de rede
+
+
+
+#### 11. Visualizando redes bibliográficas
+
+
+
+#### 12. Análise Co-Word: A estrutura conceitual de um campo
+
+
+
+#### 13. Rede Histórica de Citação Direta
+
+
+
+## Dificuldades
+
+
+
+## Bibliografia (referências dos principais autores sobre bibliometria)
+
+
+
