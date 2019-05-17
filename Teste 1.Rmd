@@ -1,10 +1,15 @@
 ---
 title: "Trabalho final - NT265"
 author: "Mariane Font Fernandes"
-date: "14/05/2019"
+date: "17/05/2019"
 output:
   html_document:
     df_print: paged
+
+  pdf_document:
+    highlight: espresso
+    toc: true
+    toc_depth: 4
 ---
 
 ```{r setup, include=FALSE}
@@ -15,18 +20,25 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Introdução
 O desenvolvimento de um projeto de pesquisa na pós-graduação requer do estudante a leitura constante de artigos que ampliem seu conhecimento específico, sendo necessário saber a tendência da comunidade científica e o quanto já foi discutido sobre o assunto. A busca por autores bem conceituados na área, assim como artigos de grande impacto para citação, não é fácil em meio a tantos materiais disponíveis. Um modo de conseguir um direcionamento seria através do R e seu pacote “Bibliometrix”, que é capaz de fazer análises quantitativas e estatísticas de publicações e suas citações. Para exemplificar, este roteiro mostra a análise de artigos, que possuem crotonilação (*crotonylation* em inglês) em seu título, seguindo os códigos disponíveis neste pacote.
 
-## Ferramentas necessárias:
+## Requerimentos:
 Para que este roteiro seja executado, é necessário fazer download do:
-  + [Software R](https://cran.r-project.org/bin/windows/base/);
-  + [RStudio](https://www.rstudio.com/products/rstudio/download/);
-  + [Git](https://git-scm.com/downloads);
-  + [MikTex](https://miktex.org/download);
-  + Pacote [Rmarkdown](https://cran.r-project.org/web/packages/rmarkdown/index.html), escrevendo no console do RStudio install.packages("rmarkdown");
-  + Pacote [Bibliometrix](https://cran.r-project.org/web/packages/bibliometrix/index.html), escrevendo no console do RStudio install.packages("bibliometrix");
-  + Arquivo Scopus.bib, com dados dos artigos relacionados a crotonilação, adquirido a partir da base de dados [Scopus](https://www.scopus.com/).
+
+  - [Software R](https://cran.r-project.org/bin/windows/base/);
+  
+  - [RStudio](https://www.rstudio.com/products/rstudio/download/);
+  
+  - [Git](https://git-scm.com/downloads);
+  
+  - [MikTex](https://miktex.org/download);
+  
+  - Pacote [Rmarkdown](https://cran.r-project.org/web/packages/rmarkdown/index.html), escrevendo no console do RStudio install.packages("rmarkdown");
+  
+  - Pacote [Bibliometrix](https://cran.r-project.org/web/packages/bibliometrix/index.html), escrevendo no console do RStudio install.packages("bibliometrix");
+  
+  - Arquivo Scopus.bib, com dados dos artigos relacionados a crotonilação, adquirido a partir da base de dados [Scopus](https://www.scopus.com/).
 
 ## Desenvolvimento:
-### 1. Carregando dado e coversão
+### 1. Carregando dados e covertendo
 Após fazer o download das ferramentas necessárias e criar um diretório no GitHub, carregamos o pacote necessário para análise no RStudio com o comando:
 
 ```{r}
@@ -70,14 +82,14 @@ plot(x=results, k=10, pause=FALSE)
 
 ### 4. Análise de referências citadas
 
-Para ter acesso a uma tabela com a frequência das referências mais citadas ou os principais autores mais citados, utilizamos a função "citations", sendo necessário indicar qual das duas informações queremos em "field" e qual o separador utilizado em "sep", que podemos confirmar com o seguinte código:
+Para ter acesso a uma tabela com a frequência das referências ou principais autores mais citados, utilizamos a função "citations", sendo necessário indicar qual das duas informações queremos em "field" e qual o separador utilizado em "sep". Para confirmar qual o separador, utilizamos o seguinte código:
 
 ```{r}
 M$CR[1]
 ```
-A figura mostra as referências do primeiro artigo. Nesse caso, o campo separador é sep = ";".
+A figura mostra as referências do primeiro artigo. Nesse caso, o campo separador é ";".
 
-Para obter os artigos mais citados:
+Para obter os artigos mais citados então, usamos o seguinte código:
 ```{r}
 CR <- citations(M, field="article", sep=";")
 cbind(CR$Cited[1:10])
@@ -97,7 +109,7 @@ CR$Papers[1:10,]
 ```
 
 ### 5. Ranking de dominância de autores
-O ranking de dominância dos autores, feito pela função "dominance", indica a fração de artigos com vários autores em que um pesquisador aparece como primeiro autor. Essa função depende do objeto obtido pela biblioAnalysis e "k" indicando o número de autores a considerar na análise.
+O ranking de dominância dos autores, feito pela função "dominance", indica a fração de artigos em que um determinado pesquisador aparece como primeiro autor. Essa função depende do objeto obtido pela biblioAnalysis e "k" indicando o número de autores a considerar na análise.
 
 ```{r}
 DF <- dominance(results, k = 10)
@@ -108,7 +120,7 @@ Neste exemplo, LIU, QIU e WEI dominam seus grupos de pesquisa, por só terem art
 
 
 ### 6. Índice-h de autores
-Para medir o impacto da produtividade e da citação das publicações de um pesquisador, utilizamos a função "Hindex", calculando o índice H dos autores ou das fontes e suas variantes (índice-g e índice-m) em uma coleção bibliográfica. Essa função tem como argumentos o dado bibliográfico que queremos analisar, o elemento que queremos analisar em "field", podendo ser autores ("author") ou fontes ("sources"), com seus nomes em "elements", sendo necessário separar o sobrenome e as iniciais por um espaço em branco para autores.
+Para medir o impacto da produtividade e da citação das publicações de um pesquisador, utilizamos a função "Hindex", calculando o índice H dos autores ou das fontes e suas variantes (índice-g e índice-m) em uma coleção bibliográfica. Essa função tem como argumento um dado bibliográfico, o elemento que queremos analisar em "field" e nomes em "elements", separando o sobrenome e as iniciais por um espaço em branco para autores.
 
 ```{r}
 indices <- Hindex(M, field = "author", elements="LI Y", sep = ";")
@@ -122,7 +134,7 @@ indices$H
 indices$CitationList
 ```
 
-Para calcular o índice h dos primeiros 10 autores mais produtivos (nesta coleção):
+Para calcular o índice h dos primeiros 10 autores mais produtivos (nesta coleção) usamos o seguinte código:
 
 ```{r}
 authors=gsub(","," ",names(results$Authors)[1:10])
@@ -133,7 +145,7 @@ indices$H
 ```
 
 ### 7. Produtividade dos principais autores ao decorrer do tempo
-A função "AuthorProdOverTime" calcula e plota a produção dos autores ao longo do tempo, de acordo com o número de publicações e o total de citações por ano. Os argumentos necessários são os dados bibliográficos, o número de autores que você deseja ver em "k" e um valor lógico (TRUE ou FALSE) em "graphs" para plotar ou não um gráfico de produção do autor ao longo do tempo.
+A função "AuthorProdOverTime" calcula e plota a produção dos autores ao longo do tempo, de acordo com o número de publicações e o total de citações por ano. Os argumentos necessários são os dados bibliográficos, o número de autores que você deseja ver em "k" e um valor lógico (TRUE ou FALSE) em "graph" para plotar ou não um gráfico de produção do autor ao longo do tempo.
 
 ```{r}
 topAU <- authorProdOverTime(M, k=10, graph=TRUE)
@@ -150,7 +162,7 @@ head(topAU$dfPapersAU)
 ```
 
 ### 8. Estimativa de coeficiente pela lei de Lotka
-A função "lotka" verifica a produtividade científica através da lei de Lotka, que descreve a frequência de publicação dos autores como uma lei do inverso do quadrado, sendo a quantidade de autores publicando um certo número de artigos uma razão fixa para a quantidade de autores publicando um único artigo, o que implica que o coeficiente beta da lei de Lotka é igual a 2. É possível avaliar a similaridade desta distribuição empírica, dada pelo coeficiente beta, com a distribuição teórica através de um teste estatístico.
+A função "lotka" verifica a produtividade científica através da lei de Lotka, que descreve a frequência de publicação dos autores como uma lei do inverso do quadrado, onde a quantidade de autores publicando um certo número de artigos é uma razão fixa para a quantidade de autores publicando um único artigo, sendo o coeficiente beta da lei de Lotka igual a 2. É possível avaliar a similaridade desta distribuição empírica, dada pelo coeficiente beta, com a distribuição teórica através de um teste estatístico.
 
 ```{r}
 L <- lotka(results)
@@ -182,9 +194,9 @@ L$p.value
 ```
 
 
-O teste de Kolmogorov-Smirnoff fornece um valor de p de 0,54, o que significa que não há diferença significativa entre as distribuições de Lotka observadas e as teóricas.
+O teste de Kolmogorov-Smirnov fornece um valor de p de 0,54, o que significa que não há diferença significativa entre as distribuições de Lotka observadas e as teóricas.
 
-Podemos comprovar esse resultado comparando as duas distribuições usando a função de plotagem:
+Podemos comprovar esse resultado comparando as duas distribuições pela função de plotagem:
 ```{r}
 # Distribuição observada:
 Observed=L$AuthorProd[,3]
@@ -219,7 +231,7 @@ Classificando, em ordem decrescente, podemos ver as fontes de publicação mais 
 sort(Matrix::colSums(U), decreasing = TRUE)[1:5]
 ```
 
-Outras possibilidades para o campo "fields" incluem "CR" para rede de citações, "AU" para rede de autores, "DE" para rede de palavras-chave do autor, "ID" para rede de mais palavras-chave e "AU_CO" para rede de países dos autores. Neste último caso, precisamos extrair essas informações do atributo de afiliação usando a função "metaTagExtraction" por não ser um atributo padrão de tabelas de dados bibliográficos. 
+Outras possibilidades para o campo "fields" incluem "CR" para rede de citações, "AU" para rede de autores, "DE" para rede de palavras-chave do autor, "ID" para rede de mais palavras-chave e "AU_CO" para rede de países dos autores. Neste último caso, precisamos extrair essas informações do atributo de afiliação usando a função "metaTagExtraction", por não ser um atributo padrão de tabelas de dados bibliográficos. 
 
 ```{r}
 # Rede de Citações:
@@ -234,6 +246,7 @@ Y <- cocMatrix(M, Field = "AU", sep = ";")
 ```{r}
 # Rede de Palavras-chave do Autor:
 V <- cocMatrix(M, Field = "DE", sep = ";")
+V
 ```
 
 ```{r}
@@ -251,7 +264,7 @@ Obs: Este último não está funcionando.
 Entre outros.
 
 #### b. Acoplamento bibliográfico
-Para calcular redes de acoplamentos, como Autores, Fontes e Países, a partir de determinado dado, utilizamos a função "biblioNetwork", que usa um argumento de análise e um argumento de rede.
+Para calcular redes de acoplamentos a partir de determinado dado, como Autores, Fontes e Países, utilizamos a função "biblioNetwork", que usa um argumento de análise e um argumento de rede.
 
 ```{r}
 NetMatrix <- biblioNetwork(M, analysis = "coupling", network = "references", sep = ".  ")
@@ -271,16 +284,17 @@ A co-citação ocorre quando dois artigos são citados em um mesmo terceiro arti
 
 ```{r}
 NetMatrix2 <- biblioNetwork(M, analysis = "co-citation", network = "references", sep = ".  ")
+NetMatrix2
 ```
 
 #### d. Colaboração bibliográfica
-A rede de colaboração científica é uma rede na qual os pontos são os autores e as linhas que os ligam são coautoriais. Podemos calculá-la usando a função "biblioNetwork":
+A rede de colaboração científica é uma rede na qual os pontos são os autores e as linhas que os ligam são coautorias. Podemos calculá-la usando a função "biblioNetwork":
 
 ```{r}
 NetMatrix3 <- biblioNetwork(M, analysis = "collaboration", network = "authors", sep = ";")
 ```
 
-Para uma rede de colaboração do país:
+Para uma rede de colaboração do país seria:
 ```{r}
 # NetMatrix4 <- biblioNetwork(M, analysis="collaboration", network="countries", sep=";")
 ```
@@ -293,6 +307,7 @@ A função "networkStat" calcula diferentes estatísticas partindo de uma matriz
 ```{r}
 NetMatrix5 <- biblioNetwork(M, analysis = "co-occurrences", network = "keywords", sep = ";")
 netstat <- networkStat(NetMatrix)
+netstat
 ```
 
 O resumo estatístico da rede fornecido possui:
@@ -314,9 +329,7 @@ Ele exibe as principais informações sobre a rede e a descrição do vértice a
 
 ### 11. Visualizando redes bibliográficas
 
-Podemos visualizar ou modeladar graficamente todas as redes bibliográficas utilizando a função "networkPlot" e o software [VOSviewer](http://www.vosviewer.com).
-
-O argumento principal do networkPlot é type. Indica o layout do mapa da rede: circle, kamada-kawai, mds, etc. Escolhendo type = "vosviewer", a função automaticamente: (i) salva a rede em um arquivo de rede pajek, chamado "vosnetwork.net"; (ii) inicia uma instância do VOSviewer que mapeará o arquivo "vosnetwork.net". Você precisa declarar, usando o argumento vos.path, o caminho completo da pasta onde o software VOSviewer está localizado (es. Vos.path = 'c: / software / VOSviewer').
+Podemos visualizar ou modeladar graficamente todas as redes bibliográficas utilizando a função "networkPlot".Seu argumento principal é type, que indica o layout do mapa de rede: circle, kamada-kawai, mds, entre outros.
 
 #### a. Países com Colaboração Científica
 Para criar uma rede de países colaboradores e plotar um gráfico, utilizamos os seguintes códigos:
@@ -328,20 +341,20 @@ net=networkPlot(NetMatrix6, n = dim(NetMatrix6)[1], Title = "Country Collaborati
 ```
 
 #### b. Rede de co-citação
-Para criar uma rede de co-citação e plotar um gráfico:
+Para criar uma rede de co-citação e plotar um gráfico, usamos:
 ```{r}
-NetMatrix <- biblioNetwork(M, analysis = "co-citation", network = "references", sep = ";")
+NetMatrix7 <- biblioNetwork(M, analysis = "co-citation", network = "references", sep = ";")
 
-net=networkPlot(NetMatrix, n = 30, Title = "Co-Citation Network", type = "fruchterman", size=T, remove.multiple=FALSE, labelsize=0.7,edgesize = 5)
+net=networkPlot(NetMatrix7, n = 30, Title = "Co-Citation Network", type = "fruchterman", size=T, remove.multiple=FALSE, labelsize=0.7,edgesize = 5)
 
 ```
 
 #### c. Co-ocorrências de palavras-chave
-Para criar uma rede de co-ocorrências de palavras chaves e plotar um gráfico:
+Para criar uma rede de co-ocorrências de palavras-chave e plotar um gráfico seria por:
 ```{r}
-NetMatrix <- biblioNetwork(M, analysis = "co-occurrences", network = "keywords", sep = ";")
+NetMatrix8 <- biblioNetwork(M, analysis = "co-occurrences", network = "keywords", sep = ";")
 
-net=networkPlot(NetMatrix, normalize="association", weighted=T, n = 30, Title = "Keyword Co-occurrences", type = "fruchterman", size=T,edgesize = 5,labelsize=0.7)
+net=networkPlot(NetMatrix8, normalize="association", weighted=T, n = 30, Title = "Keyword Co-occurrences", type = "fruchterman", size=T,edgesize = 5,labelsize=0.7)
 ```
 
 
@@ -365,13 +378,35 @@ histResults <- histNetwork(M, min.citations = 10, sep = ";")
 net <- histPlot(histResults, n=15, size = 20, labelsize=10, size.cex=TRUE, arrowsize = 0.5, color = TRUE)
 ```
 
+## Respostas encontradas
+Como mostrado em cada tópico, o pacote "bibliometrix" permite a análise bibliométrica com criação de gráficos, redes, tabelas e rankings de acordo com parâmetros importantes no meio científico, como quantidade de citações, produtividade e colaborações. Alguns dos resultados obtidos na análise de artigos que possuem crotonilação (*crotonylation* em inglês) em seu título mostram que foram produzidos entre 2011 e 2019, principalmente na China, sendo o autor mais produtivo Lu L. e o mais citado Zhao Y. Essas informações são interessantes quando pensamos em fazer um novo projeto, revisão bibliográfica ou até mesmo tentar estabelecer contato com algum pesquisador da área, focando naqueles que possuem melhores avaliações. 
 
-## Dificuldades
+## Dificuldades encontradas
 
 As principais dificuldades que tive estão relacionadas ao uso do Rmarkdown e GitHub.
-
+No Rmarkdown, por exemplo, não consegui diminuir o tamanho da fonte dos gráficos, o que acabou dificultando a visualização de alguns dados pela sobreposição de escritos. Além disso, os códigos referentes a Rede de Países dos Autores (N e Z) no tópico 9.a. e a Rede de Colaboração do País (NetMatrix4) no tópico 9.d. não funcionaram e não soube como consertá-los, mesmo pedindo auxílio a colegas de classe.
+Quanto ao GitHub, todo o processo para conseguir enviar meus arquivos a um diretório foi complicada. Compreendi melhor buscando tutoriais, que se encontram na bibliografia.
 
 ## Bibliografia
+
+#### Rmarkdown:
+  - Writing documents with R Markdown (https://monashbioinformaticsplatform.github.io/2017-11-16-open-science-training/topics/rmarkdown.html)
+  
+  - Manual do pacote 'rmarkdown' (https://cran.r-project.org/web/packages/rmarkdown/rmarkdown.pdf)
+
+#### Git:
+  - RStudio e GitHub no dia a dia (https://www.curso-r.com/blog/2017-07-17-rstudio-e-github/)
+  
+  - Git and GitHub (http://r-pkgs.had.co.nz/git.html)
+
+#### Bibliometrix:
+  - A brief introduction to bibliometrix (https://cran.r-project.org/web/packages/bibliometrix/vignettes/bibliometrix-vignette.html)
+  
+  - Manual do pacote 'bibliometrix' (https://cran.r-project.org/web/packages/bibliometrix/bibliometrix.pdf)
+
+
+#### Documento Scopus.bib:
+  - SCOPUS (http://www.scopus.com)
 
 
 
